@@ -13,7 +13,10 @@ class GoogleClosureCall(BaseCall):
 
         ua = 'Sublime Text - Google Closure'
         req = urllib2.Request("http://closure-compiler.appspot.com/compile", data, headers = { 'User-Agent': ua })
-        file = urllib2.urlopen(req, timeout=self.timeout)
+        try:
+            file = urllib2.urlopen(req, timeout=self.timeout)
+        except Exception:
+            return None
 
         mini_content = file.read().strip()
 
