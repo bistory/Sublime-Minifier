@@ -11,10 +11,7 @@ class ReducisaurusCall(BaseCall):
 
         ua = 'Sublime Text - Reducisaurus'
         req = urllib2.Request("http://reducisaurus.appspot.com/css", data, headers = { 'User-Agent': ua, 'Content-Type': 'application/x-www-form-urlencoded' })
-        try:
-            file = urllib2.urlopen(req, timeout=self.timeout)
-        except Exception:
-            return None
+        file = urllib2.urlopen(req, timeout=self.timeout)
 
         mini_content = file.read().strip()
 

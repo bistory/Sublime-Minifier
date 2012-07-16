@@ -13,10 +13,7 @@ class UglifyCall(BaseCall):
 
         ua = 'Sublime Text - Uglify'
         req = urllib2.Request("http://marijnhaverbeke.nl/uglifyjs", data, headers = { 'User-Agent': ua })
-        try:
-            file = urllib2.urlopen(req, timeout=self.timeout)
-        except Exception:
-            return None
+        file = urllib2.urlopen(req, timeout=self.timeout)
 
         mini_content = file.read().strip()
 
