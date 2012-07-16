@@ -5,8 +5,8 @@
         [
 
             {
-                "id": "Minifier",
-                "caption": "Minify",
+                "id": "Sublime Minifier",
+                "caption": "Sublime Minify",
                 "command": "minify"
             }
 
@@ -22,11 +22,11 @@
                 "children":
                 [
                     {
-                        "caption": "Minifier",
+                        "caption": "Sublime Minifier",
                         "children":
                         [
                             {
-                                "caption": "Minifier Settings – Default",
+                                "caption": "Sublime Minifier Settings – Default",
                                 "command": "open_file",
                                 "args":
                                 {
@@ -34,7 +34,7 @@
                                 }
                             },
                             {
-                                "caption": "Minifier Settings – User",
+                                "caption": "Sublime Minifier Settings – User",
                                 "command": "open_file",
                                 "args":
                                 {
