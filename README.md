@@ -7,3 +7,32 @@ Default key binding:
 `ctrl + alt + shift + m` - attempts to minify the current buffer and saves the output to a separate file.
 
 This module was forked from [JsMinifier](https://github.com/cgutierrez/JsMinifier).
+
+Installation
+------------
+<!---
+**With the Package Control plugin:** The easiest way to install SublimeCodeIntel is through Package Control, which can be found at this site: http://wbond.net/sublime_packages/package_control
+
+Once you install Package Control, restart Sublime Text 2 and bring up the Command Palette (``Command+Shift+P`` on OS X, ``Control+Shift+P`` on Linux/Windows). Select "Package Control: Install Package", wait while Package Control fetches the latest package list, then select SublimeCodeIntel when the list appears. The advantage of using this method is that Package Control will automatically keep SublimeCodeIntel up to date with the latest version.
+-->
+
+**Without Git:** Download the latest source from [GitHub](https://github.com/bistory/Sublime-Minifier) and copy the whole directory into the Packages directory.
+
+**With Git:** Clone the repository in your Sublime Text 2 Packages directory, located somewhere in user's "Home" directory:
+
+    `git clone git://github.com/bistory/Sublime-Minifier.git`
+
+
+The "Packages" packages directory is located at:
+
+* OS X:
+
+    `~/Library/Application Support/Sublime Text 2/Packages/`
+
+* Linux:
+
+    `~/.Sublime Text 2/Packages/`
+
+* Windows:
+
+    `%APPDATA%/Sublime Text 2/Packages/`
