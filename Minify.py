@@ -99,7 +99,7 @@ class BaseMinifier(sublime_plugin.TextCommand):
         current_file = self.view.file_name()
 
         file_parts = path.splitext(current_file)
-        
+
         if file_parts[1] == '.js':
             compiler = self.settings.get('compiler', 'google_closure')
             compilers = {
@@ -123,14 +123,15 @@ class Minify(BaseMinifier):
     def handle_result(self, edit, thread, selections, offset):
         result = super(Minify, self).handle_result(edit, thread, selections, offset)
 
-        editgroup = self.view.begin_edit('minify')
+        if thread.error is False:
+            editgroup = self.view.begin_edit('minify')
 
-        sel = thread.sel
-        result = thread.result
-        if offset:
-            sel = sublime.Region(thread.sel.begin() + offset, thread.sel.end() + offset)
+            sel = thread.sel
+            result = thread.result
+            if offset:
+                sel = sublime.Region(thread.sel.begin() + offset, thread.sel.end() + offset)
 
-        self.view.replace(edit, sel, result)
+            self.view.replace(edit, sel, result)
 
 class MinifyToFile(BaseMinifier):
 
@@ -148,26 +149,27 @@ class MinifyToFile(BaseMinifier):
 
         super(MinifyToFile, self).handle_result(edit, thread, selections, offset)
 
-        self.output = self.output + self.get_new_line() + thread.result
+        if thread.error is False:
+            self.output = self.output + self.get_new_line() + thread.result
 
-        # test if all the selections have been minified. if so, write all the output to the new file
-        if self.selections_completed is self.total_selections:
+            # test if all the selections have been minified. if so, write all the output to the new file
+            if self.selections_completed is self.total_selections:
 
-            current_file = self.view.file_name()
+                current_file = self.view.file_name()
 
-            file_parts = path.splitext(current_file)
-            min_file_suffix = self.settings.get('min_file_suffix', '.min')
+                file_parts = path.splitext(current_file)
+                min_file_suffix = self.settings.get('min_file_suffix', '.min')
 
-            file_name = file_parts[0] + min_file_suffix + file_parts[1]
+                file_name = file_parts[0] + min_file_suffix + file_parts[1]
 
-            file_path = path.join(
-                path.dirname(current_file),
-                file_name
-            )
-            
-            with open(file_path, 'w+', 0) as min_file:
-                min_file.write(self.output.strip())
-            
-            print self.settings.get('open_on_min', True)
-            if (self.settings.get('open_on_min', True) == True):
-                self.window.open_file(file_name)
+                file_path = path.join(
+                    path.dirname(current_file),
+                    file_name
+                )
+                
+                with open(file_path, 'w+', 0) as min_file:
+                    min_file.write(self.output.strip())
+                
+                print self.settings.get('open_on_min', True)
+                if (self.settings.get('open_on_min', True) == True):
+                    self.window.open_file(file_name)
