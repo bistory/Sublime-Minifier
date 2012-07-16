@@ -8,11 +8,11 @@ Usage
 -----
 
 __Windows__ / __Linux__ default key binding:    
-`ctrl + alt + m` - attempts to minify the current buffer and replaces the buffers content
+`ctrl + alt + m` - attempts to minify the current buffer and replaces the buffers content    
 `ctrl + alt + shift + m` - attempts to minify the current buffer and saves the output to a separate file.
 
 __MacOSX__ default key binding:    
-`⌘ + alt + m` - attempts to minify the current buffer and replaces the buffers content
+`⌘ + alt + m` - attempts to minify the current buffer and replaces the buffers content    
 `⌘ + alt + shift + m` - attempts to minify the current buffer and saves the output to a separate file.
 
 
