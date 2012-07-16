@@ -2,11 +2,19 @@
 
 The plugin supports the [Google Closure Compiler](https://developers.google.com/closure/compiler/) and [UglifyJS](https://github.com/mishoo/UglifyJS) compilers for Javascript minification and [Reducisaurus](http://code.google.com/p/reducisaurus/) for CSS minification.
 
-Default key binding: 
-`ctrl + alt + m` - attempts to minify the current buffer and replaces the buffers content
+This module was forked from [JsMinifier](https://github.com/cgutierrez/JsMinifier).
+
+Usage
+-----
+
+__Windows__ / __Linux__ default key binding:    
+`ctrl + alt + m` - attempts to minify the current buffer and replaces the buffers content    
 `ctrl + alt + shift + m` - attempts to minify the current buffer and saves the output to a separate file.
 
-This module was forked from [JsMinifier](https://github.com/cgutierrez/JsMinifier).
+__MacOSX__ default key binding:    
+`⌘ + alt + m` - attempts to minify the current buffer and replaces the buffers content    
+`⌘ + alt + shift + m` - attempts to minify the current buffer and saves the output to a separate file.
+
 
 Installation
 ------------
@@ -16,7 +24,7 @@ Installation
 Once you install Package Control, restart Sublime Text 2 and bring up the Command Palette (``Command+Shift+P`` on OS X, ``Control+Shift+P`` on Linux/Windows). Select "Package Control: Install Package", wait while Package Control fetches the latest package list, then select SublimeCodeIntel when the list appears. The advantage of using this method is that Package Control will automatically keep SublimeCodeIntel up to date with the latest version.
 -->
 
-**Without Git:** Download the latest source from [GitHub](https://github.com/bistory/Sublime-Minifier) and copy the whole directory into the Packages directory.
+**Without Git:** Download the latest source from [GitHub](https://github.com/bistory/Sublime-Minifier) and copy the whole directory into the Packages directory. Make sure folder name is "Minifier".
 
 **With Git:** Clone the repository in your Sublime Text 2 Packages directory, located somewhere in user's "Home" directory:
 
