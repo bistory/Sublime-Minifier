@@ -1,8 +1,8 @@
 [
     {
-        "keys": ["ctrl+alt+m"], "command": "minify"
+        "keys": ["super+alt+m"], "command": "minify"
     },
     {
-        "keys": ["ctrl+alt+shift+m"], "command": "minify_to_file"
+        "keys": ["super+alt+shift+m"], "command": "minify_to_file"
     }
 ]
