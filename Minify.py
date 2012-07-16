@@ -6,12 +6,12 @@ import sublime_plugin
 from compilers import GoogleClosureCall, UglifyCall, ReducisaurusCall
 
 class BaseMinifier(sublime_plugin.TextCommand):
-    """Base Minifier"""
+    '''Base Minifier'''
 
     def __init__(self, view):
         self.view = view
         self.window = sublime.active_window()
-        self.settings = sublime.load_settings("Minifier.sublime-settings")
+        self.settings = sublime.load_settings('Minifier.sublime-settings')
 
     def run(self, edit):
 
@@ -26,7 +26,7 @@ class BaseMinifier(sublime_plugin.TextCommand):
                         sel,
                         selbody,
                         timeout=self.settings.get('timeout', 5),
-                        level=self.settings.get('optimization_level', "WHITESPACE_ONLY"),
+                        level=self.settings.get('optimization_level', 'WHITESPACE_ONLY'),
                         rm_new_lines=self.settings.get('remove_new_lines', False))
 
             threads.append(thread)
@@ -90,7 +90,7 @@ class BaseMinifier(sublime_plugin.TextCommand):
             sublime.error_message(result)
             return
         elif result is None:
-            sublime.error_message("There was an error minifying the file.")
+            sublime.error_message('There was an error minifying the file.')
             return
 
         return thread
@@ -101,7 +101,7 @@ class BaseMinifier(sublime_plugin.TextCommand):
         file_parts = path.splitext(current_file)
         
         if file_parts[1] == '.js':
-            compiler = self.settings.get('compiler', "google_closure")
+            compiler = self.settings.get('compiler', 'google_closure')
             compilers = {
                 'google_closure': GoogleClosureCall,
                 'uglify_js': UglifyCall
