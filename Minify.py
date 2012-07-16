@@ -25,7 +25,7 @@ class BaseMinifier(sublime_plugin.TextCommand):
             thread = CompilerCall(
                         sel,
                         selbody,
-                        timeout=5,
+                        timeout=self.settings.get('timeout', 5),
                         level=self.settings.get('optimization_level', "WHITESPACE_ONLY"),
                         rm_new_lines=self.settings.get('remove_new_lines', False))
 
@@ -90,7 +90,7 @@ class BaseMinifier(sublime_plugin.TextCommand):
             sublime.error_message(result)
             return
         elif result is None:
-            sublime.error_message("There was an error minifying the Javascript.")
+            sublime.error_message("There was an error minifying the file.")
             return
 
         return thread
