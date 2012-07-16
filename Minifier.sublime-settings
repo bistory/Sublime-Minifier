@@ -5,7 +5,7 @@
     "remove_new_lines": false,
 
     // the default optimization level to use for minification
-    "optimization_level": "WHITESPACE_ONLY",
+    "optimization_level": "SIMPLE_OPTIMIZATIONS",
 
     // the compiler to use for minification.
     // Accepted values are: google_closure|uglify_js
