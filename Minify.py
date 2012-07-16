@@ -123,7 +123,7 @@ class Minify(BaseMinifier):
     def handle_result(self, edit, thread, selections, offset):
         result = super(Minify, self).handle_result(edit, thread, selections, offset)
 
-        if thread.error is False:
+        if thread.error is None:
             editgroup = self.view.begin_edit('minify')
 
             sel = thread.sel
@@ -149,7 +149,7 @@ class MinifyToFile(BaseMinifier):
 
         super(MinifyToFile, self).handle_result(edit, thread, selections, offset)
 
-        if thread.error is False:
+        if thread.error is None:
             self.output = self.output + self.get_new_line() + thread.result
 
             # test if all the selections have been minified. if so, write all the output to the new file
