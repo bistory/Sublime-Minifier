@@ -27,3 +27,6 @@ class BaseCall(threading.Thread):
         except (urllib2.URLError) as (e):
             self.error = True
             self.result = 'Minifier Error: ' + str(e.reason)
+        except UnicodeEncodeError:
+            self.error = True
+            self.result = 'You can only use ASCII characters'
