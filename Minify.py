@@ -18,22 +18,25 @@ class BaseMinifier(sublime_plugin.TextCommand):
         selections = self.get_selections()
         CompilerCall = self.get_minifier()
 
-        threads = []
-        for sel in selections:
-            selbody = self.view.substr(sel)
+        if CompilerCall is None:
+            sublime.error_message('Please focus on the file you wish to minify.')
+        else:
+            threads = []
+            for sel in selections:
+                selbody = self.view.substr(sel)
 
-            thread = CompilerCall(
-                        sel,
-                        selbody,
-                        timeout=self.settings.get('timeout', 5),
-                        level=self.settings.get('optimization_level', 'WHITESPACE_ONLY'),
-                        rm_new_lines=self.settings.get('remove_new_lines', False))
+                thread = CompilerCall(
+                            sel,
+                            selbody,
+                            timeout=self.settings.get('timeout', 5),
+                            level=self.settings.get('optimization_level', 'WHITESPACE_ONLY'),
+                            rm_new_lines=self.settings.get('remove_new_lines', False))
 
-            threads.append(thread)
-            thread.start()
+                threads.append(thread)
+                thread.start()
 
-        selections.clear()
-        self.handle_threads(edit, threads, selections, offset=0, i=0, dir=1)
+            selections.clear()
+            self.handle_threads(edit, threads, selections, offset=0, i=0, dir=1)
 
     def get_selections(self):
         selections = self.view.sel()
@@ -98,18 +101,21 @@ class BaseMinifier(sublime_plugin.TextCommand):
     def get_minifier(self):
         current_file = self.view.file_name()
 
-        file_parts = path.splitext(current_file)
+        if current_file is None:
+            return None
+        else:
+            file_parts = path.splitext(current_file)
 
-        if file_parts[1] == '.js':
-            compiler = self.settings.get('compiler', 'google_closure')
-            compilers = {
-                'google_closure': GoogleClosureCall,
-                'uglify_js': UglifyCall
-            }
+            if file_parts[1] == '.js':
+                compiler = self.settings.get('compiler', 'google_closure')
+                compilers = {
+                    'google_closure': GoogleClosureCall,
+                    'uglify_js': UglifyCall
+                }
 
-            return compilers[compiler] if compiler in compilers else compilers['google_closure']
-        elif file_parts[1] == '.css':
-            return ReducisaurusCall
+                return compilers[compiler] if compiler in compilers else compilers['google_closure']
+            elif file_parts[1] == '.css':
+                return ReducisaurusCall
 
     def get_new_line(self):
         CR = chr(0x0D)
