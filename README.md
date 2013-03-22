@@ -1,6 +1,6 @@
 # A Javascript and CSS Minifier for Sublime Text 2
 
-The plugin supports the [Google Closure Compiler](https://developers.google.com/closure/compiler/) and [UglifyJS](https://github.com/mishoo/UglifyJS) compilers for Javascript minification and [Reducisaurus](http://code.google.com/p/reducisaurus/) for CSS minification.
+The plugin supports the [Google Closure Compiler](https://developers.google.com/closure/compiler/) and [UglifyJS](https://github.com/mishoo/UglifyJS) compilers for Javascript minification and [cssminifier](http://www.cssminifier.com/) and [Reducisaurus](http://code.google.com/p/reducisaurus/) for CSS minification.
 
 This module was forked from [JsMinifier](https://github.com/cgutierrez/JsMinifier).
 
