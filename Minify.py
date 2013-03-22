@@ -3,7 +3,7 @@ from os import path
 import sublime
 import sublime_plugin
 
-from compilers import GoogleClosureCall, UglifyCall, ReducisaurusCall
+from compilers import GoogleClosureCall, UglifyCall, ReducisaurusCall, CssminifierCall
 
 class BaseMinifier(sublime_plugin.TextCommand):
     '''Base Minifier'''
@@ -115,7 +115,12 @@ class BaseMinifier(sublime_plugin.TextCommand):
 
                 return compilers[compiler] if compiler in compilers else compilers['google_closure']
             elif file_parts[1] == '.css':
-                return ReducisaurusCall
+                compiler = self.settings.get('css_compiler', 'cssminifier')
+                compilers = {
+                    'reducisaurus': ReducisaurusCall,
+                    'cssminifier': CssminifierCall
+                }
+                return compilers[compiler] if compiler in compilers else compilers['cssminifier']
 
     def get_new_line(self):
         CR = chr(0x0D)

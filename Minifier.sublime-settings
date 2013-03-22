@@ -11,6 +11,10 @@
     // Accepted values are: google_closure|uglify_js
     "compiler": "google_closure",
 
+    // the compiler to use for minification.
+    // Accepted values are: cssminifier|reducisaurus
+    "css_compiler": "cssminifier",
+
     // when you create a file you want to automatically open it?
     "open_on_min": true,
 
