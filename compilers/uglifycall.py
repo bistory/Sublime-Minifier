@@ -8,9 +8,7 @@ class UglifyCall(BaseCall):
     def exec_request(self):
 
         data = urllib.urlencode({
-            'js_code': self.original.encode('utf-8'),
-            'compilation_level': self.level,
-            'output_info': "compiled_code" })
+            'js_code': self.original.encode('utf-8') })
 
         ua = 'Sublime Text - Uglify'
         req = urllib2.Request("http://marijnhaverbeke.nl/uglifyjs", data, headers = { 'User-Agent': ua })

@@ -9,7 +9,7 @@
 
     // the compiler to use for minification.
     // Accepted values are: google_closure|uglify_js
-    "compiler": "google_closure",
+    "compiler": "uglify_js",
 
     // the compiler to use for minification.
     // Accepted values are: cssminifier|reducisaurus
