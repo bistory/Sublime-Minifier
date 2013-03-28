@@ -12,7 +12,7 @@ class CssminifierCall(BaseCall):
             'input': self.original })
 
         ua = 'Sublime Text - cssminifier'
-        req = urllib2.Request("http://www.cssminifier.com/raw", data, headers = { 'User-Agent': ua, 'Content-Type': 'application/x-www-form-urlencoded' })
+        req = urllib2.Request("http://cssminifier.com/raw", data, headers = { 'User-Agent': ua, 'Content-Type': 'application/x-www-form-urlencoded' })
         file = urllib2.urlopen(req, timeout=self.timeout)
 
         mini_content = file.read().strip()
