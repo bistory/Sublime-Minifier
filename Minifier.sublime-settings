@@ -19,5 +19,8 @@
     "open_on_min": true,
 
     // HTTP Timeout
-    "timeout": 10
+    "timeout": 10,
+
+    //on save, should i auto generate a .min. version
+    "auto_minify_on_save": false
 }
