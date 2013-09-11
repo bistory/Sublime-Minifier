@@ -1,18 +1,33 @@
-import urllib
-import urllib2
+import sublime
 import re
-from basecall import BaseCall
+if sublime.version() < '3':
+    import urllib
+    import urllib2
+    from basecall import BaseCall
+else:
+    import urllib.request
+    import urllib.parse
+    from Minifier.compilers.basecall import BaseCall
 
 class ReducisaurusCall(BaseCall):
 
     def exec_request(self):
-
-        data = urllib.urlencode({
-            'file': self.original })
-
         ua = 'Sublime Text - Reducisaurus'
-        req = urllib2.Request("http://reducisaurus.appspot.com/css", data, headers = { 'User-Agent': ua, 'Content-Type': 'application/x-www-form-urlencoded' })
-        file = urllib2.urlopen(req, timeout=self.timeout)
+        query = {
+            'file': self.original }
+        url = "http://reducisaurus.appspot.com/css"
+        
+        if sublime.version() < '3':
+            data = urllib.urlencode(query)
+        
+            req = urllib2.Request(url, data, headers = { 'User-Agent': ua, 'Content-Type': 'application/x-www-form-urlencoded' })
+            file = urllib2.urlopen(req, timeout=self.timeout)
+        else:
+            data = urllib.parse.urlencode(query)
+            binary_data = data.encode('utf8')
+        
+            req = urllib.request.Request(url, binary_data, headers = { 'User-Agent': ua, 'Content-Type': 'application/x-www-form-urlencoded' })
+            file = urllib.request.urlopen(req, timeout=self.timeout)
 
         mini_content = file.read().strip()
 

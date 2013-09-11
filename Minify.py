@@ -3,7 +3,10 @@ from os import path
 import sublime
 import sublime_plugin
 
-from compilers import GoogleClosureCall, UglifyCall, ReducisaurusCall, CssminifierCall
+if sublime.version() < '3':
+    from compilers import GoogleClosureCall, UglifyCall, ReducisaurusCall, CssminifierCall
+else:
+    from Minifier.compilers import GoogleClosureCall, UglifyCall, ReducisaurusCall, CssminifierCall
 
 class BaseMinifier(sublime_plugin.TextCommand):
     '''Base Minifier'''
@@ -34,6 +37,10 @@ class BaseMinifier(sublime_plugin.TextCommand):
 
                 threads.append(thread)
                 thread.start()
+            
+            # Wait for threads
+            for thread in threads:
+                thread.join()
 
             selections.clear()
             self.handle_threads(edit, threads, selections, offset=0, i=0, dir=1)
@@ -80,7 +87,6 @@ class BaseMinifier(sublime_plugin.TextCommand):
             sublime.set_timeout(lambda: self.handle_threads(edit, threads, selections, offset, i, dir), 100)
             return
 
-        self.view.end_edit(edit)
         self.view.erase_status('minify')
         sublime.status_message('Successfully minified')
 
@@ -135,14 +141,21 @@ class Minify(BaseMinifier):
         result = super(Minify, self).handle_result(edit, thread, selections, offset)
 
         if thread.error is None:
-            editgroup = self.view.begin_edit('minify')
+            if sublime.version() < '3':
+                editgroup = self.view.begin_edit('minify')
 
             sel = thread.sel
             result = thread.result
             if offset:
                 sel = sublime.Region(thread.sel.begin() + offset, thread.sel.end() + offset)
 
-            self.view.replace(edit, sel, result)
+            if sublime.version() < '3':
+                self.view.replace(edit, sel, result)
+            else:
+                self.view.replace(edit, sel, result.decode("utf-8"))
+
+            if sublime.version() < '3':
+                self.view.end_edit(edit)
 
 class MinifyToFile(BaseMinifier):
 
@@ -181,6 +194,6 @@ class MinifyToFile(BaseMinifier):
                 with open(file_path, 'w+', 0) as min_file:
                     min_file.write(self.output.strip())
 
-                print self.settings.get('open_on_min', True)
+                print (self.settings.get('open_on_min', True))
                 if (self.settings.get('open_on_min', True) == True):
                     self.window.open_file(file_name)
