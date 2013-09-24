@@ -174,7 +174,10 @@ class MinifyToFile(BaseMinifier):
         super(MinifyToFile, self).handle_result(edit, thread, selections, offset)
 
         if thread.error is None:
-            self.output = self.output + self.get_new_line() + thread.result
+            if sublime.version() < '3':
+                self.output = self.output + self.get_new_line() + thread.result
+            else:
+                self.output = self.output + self.get_new_line() + thread.result.decode('utf-8')
 
             # test if all the selections have been minified. if so, write all the output to the new file
             if self.selections_completed is self.total_selections:
@@ -191,8 +194,12 @@ class MinifyToFile(BaseMinifier):
                     file_name
                 )
 
-                with open(file_path, 'w+', 0) as min_file:
-                    min_file.write(self.output.strip())
+                if sublime.version() < '3':
+                    with open(file_path, 'w+', 0) as min_file:
+                        min_file.write(self.output.strip())
+                else:
+                    with open(file_path, 'wb+', 0) as min_file:
+                        min_file.write(bytes(self.output.strip(),'utf-8'))
 
                 print (self.settings.get('open_on_min', True))
                 if (self.settings.get('open_on_min', True) == True):
