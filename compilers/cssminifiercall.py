@@ -13,9 +13,8 @@ class CssminifierCall(BaseCall):
 
     def exec_request(self):
         ua = 'Sublime Text - cssminifier'
-        query = {
-            'input': self.original }
-        url = "http://cssminifier.com/raw"
+        query = {'input': self.original }
+        url = "https://cssminifier.com/raw"
         
         if sublime.version() < '3':
             data = urllib.urlencode(query)

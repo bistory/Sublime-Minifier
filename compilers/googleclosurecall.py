@@ -16,8 +16,9 @@ class GoogleClosureCall(BaseCall):
         query = {
             'js_code': self.original.encode('utf-8'),
             'compilation_level': self.level,
-            'output_info': "compiled_code" }
-        url = "http://closure-compiler.appspot.com/compile"
+            'output_info': "compiled_code" 
+        }
+        url = "https://closure-compiler.appspot.com/compile"
         
         if sublime.version() < '3':
             data = urllib.urlencode(query)

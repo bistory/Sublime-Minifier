@@ -19,5 +19,12 @@
     "open_on_min": true,
 
     // HTTP Timeout
-    "timeout": 10
+    "timeout": 10,
+
+    // Custom File Save
+    "minify_options" : {
+        "ask_file_name" : true,
+        "default_name" : "czmb.min.js",
+        "suffix" : null
+    }
 }
