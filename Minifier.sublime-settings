@@ -8,8 +8,8 @@
     "optimization_level": "SIMPLE_OPTIMIZATIONS",
 
     // the compiler to use for minification.
-    // Accepted values are: google_closure|uglify_js
-    "compiler": "uglify_js",
+    // Accepted values are: google_closure|uglify_js (don't use it anymore, it's broken and will be removed soon !)
+    "compiler": "google_closure",
 
     // the compiler to use for minification.
     // Accepted values are: cssminifier|reducisaurus
