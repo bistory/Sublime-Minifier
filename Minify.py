@@ -132,6 +132,15 @@ class BaseMinifier(sublime_plugin.TextCommand):
         endtypes = {'u': LF, 'w': CR+LF, 'm': CR}
         return endtypes[self.view.line_endings()[0].lower()]
 
+class MinifyAutoMagic(sublime_plugin.EventListener):
+    def on_post_save(self, view): 
+        self.settings = sublime.load_settings('Minifier.sublime-settings')  
+        file_can_minify_list = [ 'css', 'js']
+        if self.settings.get('auto_minify_on_save', False ) == True:
+            if view.file_name().split('.').pop().lower() in file_can_minify_list:
+                sublime.status_message(' Starting auto minify for ' + view.file_name() );
+                view.run_command('minify_to_file');
+                #sublime.message_dialog( " AutoMinifyAndSave " + view.file_name()  );
 
 class Minify(BaseMinifier):
 
