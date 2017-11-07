@@ -1,7 +1,10 @@
 import sublime
 import sublime_plugin
-import urllib2
 import threading
+if sublime.version() < '3':
+    import urllib2
+else:
+    import urllib.error
 
 class BaseCall(threading.Thread):
 
@@ -19,14 +22,27 @@ class BaseCall(threading.Thread):
         return
 
     def run(self):
-        try:
-            self.result = self.exec_request()
-        except (urllib2.HTTPError) as (e):
-            self.error = True
-            self.result = 'Minifier Error: HTTP error %s contacting API' % (str(e.code))
-        except (urllib2.URLError) as (e):
-            self.error = True
-            self.result = 'Minifier Error: ' + str(e.reason)
-        except UnicodeEncodeError:
-            self.error = True
-            self.result = 'You can only use ASCII characters'
+        if sublime.version() < '3':
+            try:
+                self.result = self.exec_request()
+            except urllib2.HTTPError as e:
+                self.error = True
+                self.result = 'Minifier Error: HTTP error %s contacting API' % (str(e.code))
+            except urllib2.URLError as e:
+                self.error = True
+                self.result = 'Minifier Error: ' + str(e.reason)
+            except UnicodeEncodeError:
+                self.error = True
+                self.result = 'You can only use ASCII characters'
+        else:
+            try:
+                self.result = self.exec_request()
+            except urllib.error.HTTPError as e:
+                self.error = True
+                self.result = 'Minifier Error: HTTP error %s contacting API' % (str(e.code))
+            except urllib.error.URLError as e:
+                self.error = True
+                self.result = 'Minifier Error: ' + str(e.reason)
+            except UnicodeEncodeError:
+                self.error = True
+                self.result = 'You can only use ASCII characters'

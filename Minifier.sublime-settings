@@ -21,6 +21,15 @@
     // HTTP Timeout
     "timeout": 10,
 
+<<<<<<< HEAD
     //on save, should i auto generate a .min. version
     "auto_minify_on_save": false
+=======
+    // Custom File Save
+    "minify_options" : {
+        "ask_file_name" : true,
+        "default_name" : "czmb.min.js",
+        "suffix" : null
+    }
+>>>>>>> master
 }

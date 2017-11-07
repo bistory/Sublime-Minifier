@@ -1,10 +1,10 @@
 [
     {
-        "caption": "Minify Javascript",
+        "caption": "Minify Javascript/CSS",
         "command": "minify"
     },
     {
-        "caption": "Minify Javascript to file",
+        "caption": "Minify Javascript/CSS to file",
         "command": "minify_to_file"
     }
 ]

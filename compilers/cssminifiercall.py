@@ -1,19 +1,32 @@
-import urllib
-import urllib2
+import sublime
 import re
-import httplib
-from basecall import BaseCall
+if sublime.version() < '3':
+    import urllib
+    import urllib2
+    from basecall import BaseCall
+else:
+    import urllib.request
+    import urllib.parse
+    from Minifier.compilers.basecall import BaseCall
 
 class CssminifierCall(BaseCall):
 
     def exec_request(self):
-    
-        data = urllib.urlencode({
-            'input': self.original })
-
         ua = 'Sublime Text - cssminifier'
-        req = urllib2.Request("http://cssminifier.com/raw", data, headers = { 'User-Agent': ua, 'Content-Type': 'application/x-www-form-urlencoded' })
-        file = urllib2.urlopen(req, timeout=self.timeout)
+        query = {'input': self.original }
+        url = "https://cssminifier.com/raw"
+        
+        if sublime.version() < '3':
+            data = urllib.urlencode(query)
+        
+            req = urllib2.Request(url, data, headers = { 'User-Agent': ua, 'Content-Type': 'application/x-www-form-urlencoded' })
+            file = urllib2.urlopen(req, timeout=self.timeout)
+        else:
+            data = urllib.parse.urlencode(query)
+            binary_data = data.encode('utf8')
+        
+            req = urllib.request.Request(url, binary_data, headers = { 'User-Agent': ua, 'Content-Type': 'application/x-www-form-urlencoded' })
+            file = urllib.request.urlopen(req, timeout=self.timeout)
 
         mini_content = file.read().strip()
 

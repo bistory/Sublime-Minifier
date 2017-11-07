@@ -3,7 +3,10 @@ from os import path
 import sublime
 import sublime_plugin
 
-from compilers import GoogleClosureCall, UglifyCall, ReducisaurusCall, CssminifierCall
+if sublime.version() < '3':
+    from compilers import GoogleClosureCall, UglifyCall, ReducisaurusCall, CssminifierCall
+else:
+    from Minifier.compilers import GoogleClosureCall, UglifyCall, ReducisaurusCall, CssminifierCall
 
 class BaseMinifier(sublime_plugin.TextCommand):
     '''Base Minifier'''
@@ -14,7 +17,6 @@ class BaseMinifier(sublime_plugin.TextCommand):
         self.settings = sublime.load_settings('Minifier.sublime-settings')
 
     def run(self, edit):
-
         selections = self.get_selections()
         CompilerCall = self.get_minifier()
 
@@ -24,7 +26,6 @@ class BaseMinifier(sublime_plugin.TextCommand):
             threads = []
             for sel in selections:
                 selbody = self.view.substr(sel)
-
                 thread = CompilerCall(
                             sel,
                             selbody,
@@ -34,6 +35,10 @@ class BaseMinifier(sublime_plugin.TextCommand):
 
                 threads.append(thread)
                 thread.start()
+            
+            # Wait for threads
+            for thread in threads:
+                thread.join()
 
             selections.clear()
             self.handle_threads(edit, threads, selections, offset=0, i=0, dir=1)
@@ -80,7 +85,6 @@ class BaseMinifier(sublime_plugin.TextCommand):
             sublime.set_timeout(lambda: self.handle_threads(edit, threads, selections, offset, i, dir), 100)
             return
 
-        self.view.end_edit(edit)
         self.view.erase_status('minify')
         sublime.status_message('Successfully minified')
 
@@ -144,14 +148,21 @@ class Minify(BaseMinifier):
         result = super(Minify, self).handle_result(edit, thread, selections, offset)
 
         if thread.error is None:
-            editgroup = self.view.begin_edit('minify')
+            if sublime.version() < '3':
+                editgroup = self.view.begin_edit('minify')
 
             sel = thread.sel
             result = thread.result
             if offset:
                 sel = sublime.Region(thread.sel.begin() + offset, thread.sel.end() + offset)
 
-            self.view.replace(edit, sel, result)
+            if sublime.version() < '3':
+                self.view.replace(edit, sel, result)
+            else:
+                self.view.replace(edit, sel, result.decode("utf-8"))
+
+            if sublime.version() < '3':
+                self.view.end_edit(edit)
 
 class MinifyToFile(BaseMinifier):
 
@@ -163,33 +174,74 @@ class MinifyToFile(BaseMinifier):
 
         super(MinifyToFile, self).run(edit)
 
-    def handle_result(self, edit, thread, selections, offset):
+    def save(self, name):
+        destination_file = path.join(
+            self.file_path,
+            name
+        )
 
+        extension = destination_file.split(".")
+        extension = extension[-1]
+        if("."+extension != self.extension):
+            destination_file = destination_file+self.extension
+
+        if sublime.version() < '3':
+            with open(destination_file, 'w+', 0) as min_file:
+                min_file.write(self.output.strip())
+        else:
+            with open(destination_file, 'wb+', 0) as min_file:
+                min_file.write(bytes(self.output.strip(),'utf-8'))
+
+        print (self.settings.get('open_on_min', True))
+        if (self.settings.get('open_on_min', True) == True):
+            self.window.open_file(destination_file)
+
+    def handle_result(self, edit, thread, selections, offset):
         self.selections_completed += 1
 
         super(MinifyToFile, self).handle_result(edit, thread, selections, offset)
 
         if thread.error is None:
-            self.output = self.output + self.get_new_line() + thread.result
+            if sublime.version() < '3':
+                self.output = self.output + self.get_new_line() + thread.result
+            else:
+                self.output = self.output + self.get_new_line() + thread.result.decode('utf-8')
 
             # test if all the selections have been minified. if so, write all the output to the new file
             if self.selections_completed is self.total_selections:
-
                 current_file = self.view.file_name()
 
                 file_parts = path.splitext(current_file)
-                min_file_suffix = self.settings.get('min_file_suffix', '.min')
+                self.extension = file_parts[1]
 
-                file_name = file_parts[0] + min_file_suffix + file_parts[1]
+                self.file_path = path.dirname(current_file)
 
-                file_path = path.join(
-                    path.dirname(current_file),
-                    file_name
-                )
+                options = self.settings.get('minify_options', {
+                    "ask_file_name" : False,
+                    "default_name" : None,
+                    "suffix" : ".min"
+                })
 
-                with open(file_path, 'w+', 0) as min_file:
-                    min_file.write(self.output.strip())
+                if (options['default_name'] is None):
+                    file_name_list = current_file.split('/')
+                    real_file_name = file_name_list[-1]
+                    placeholder = real_file_name
+                else:
+                    placeholder = options['default_name']
 
-                print self.settings.get('open_on_min', True)
-                if (self.settings.get('open_on_min', True) == True):
-                    self.window.open_file(file_name)
+                if (self.settings.has('min_file_suffix')):
+                    self.min_file_suffix = self.settings.get('min_file_suffix', '')
+                elif (('suffix' in options) and (options['suffix'] is not None)):
+                    self.min_file_suffix = options['suffix']
+                else:
+                    self.min_file_suffix = ""
+                
+                tmp = placeholder.split(".")
+                tmp = tmp[:-1]
+
+                placeholder = "".join(tmp) + self.min_file_suffix+ self.extension
+
+                if (options['ask_file_name'] == True):
+                    self.window.show_input_panel("File Name", placeholder, self.save, None, None);
+                else:
+                    self.save(placeholder)
