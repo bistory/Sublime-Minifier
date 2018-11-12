@@ -237,7 +237,8 @@ class MinifyToFile(BaseMinifier):
                     self.min_file_suffix = ""
                 
                 tmp = placeholder.split(".")
-                tmp = tmp[:-1]
+                if ( 1 < len(tmp) ):
+                    tmp = tmp[:-1]
 
                 placeholder = "".join(tmp) + self.min_file_suffix+ self.extension
 
