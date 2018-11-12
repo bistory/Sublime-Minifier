@@ -222,10 +222,10 @@ class MinifyToFile(BaseMinifier):
                     "suffix" : ".min"
                 })
 
-                if (options['default_name'] is None):
+                if (options['default_name'] is None or options['default_name'] == "%fileName%"):
                     file_name_list = current_file.split('/')
                     real_file_name = file_name_list[-1]
-                    placeholder = real_file_name
+                    placeholder = path.splitext(path.basename(current_file))[0]
                 else:
                     placeholder = options['default_name']
 
